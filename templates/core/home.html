@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}VietTravel — Đặt vé Du lịch Trực tuyến{% endblock %}
+{% block content %}
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="hero-grid"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="badge-dot"></span>Hơn {{ stats.total_bookings|default:'2,847' }} chuyến đã được đặt</div>
+    <h1 class="hero-title">Khám phá <span class="gradient-text">Việt Nam</span><br/>theo cách của bạn</h1>
+    <p class="hero-desc">Đặt tour du lịch dễ dàng — Giá tốt nhất — Hướng dẫn viên chuyên nghiệp. Trải nghiệm những khoảnh khắc khó quên cùng VietTravel.</p>
+    <div class="hero-search">
+      <form method="GET" action="{% url 'tour_list' %}" class="search-form">
+        <div class="search-input-wrap">
+          <i class="fas fa-search"></i>
+          <input type="text" name="q" placeholder="Tìm kiếm tour (Hà Nội, Đà Nẵng, Phú Quốc...)" class="search-input"/>
+        </div>
+        <button type="submit" class="btn-search">Tìm Tour</button>
+      </form>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-num">{{ stats.total_tours|default:'5' }}+</div><div class="hstat-label">Tour nổi bật</div></div>
+      <div class="hstat-div"></div>
+      <div class="hstat"><div class="hstat-num">{{ stats.total_customers|default:'500' }}+</div><div class="hstat-label">Khách hàng</div></div>
+      <div class="hstat-div"></div>
+      <div class="hstat"><div class="hstat-num">98%</div><div class="hstat-label">Hài lòng</div></div>
+      <div class="hstat-div"></div>
+      <div class="hstat"><div class="hstat-num">24/7</div><div class="hstat-label">Hỗ trợ</div></div>
+    </div>
+  </div>
+  <div class="hero-cards">
+    <div class="hero-card-float">
+      <div class="hc-img" style="background:linear-gradient(135deg,#6366f1,#06b6d4)"><i class="fas fa-map-marked-alt"></i></div>
+      <div class="hc-info"><div class="hc-title">Hạ Long Bay</div><div class="hc-sub">3N2Đ từ 4.200.000đ</div></div>
+      <span class="hc-badge">🔥 Hot</span>
+    </div>
+    <div class="hero-card-float" style="--delay:0.2s">
+      <div class="hc-img" style="background:linear-gradient(135deg,#f59e0b,#ef4444)"><i class="fas fa-umbrella-beach"></i></div>
+      <div class="hc-info"><div class="hc-title">Phú Quốc</div><div class="hc-sub">4N3Đ từ 9.200.000đ</div></div>
+      <span class="hc-badge" style="background:#10b981">🌴 Mới</span>
+    </div>
+    <div class="hero-card-float" style="--delay:0.4s">
+      <div class="hc-img" style="background:linear-gradient(135deg,#10b981,#06b6d4)"><i class="fas fa-mountain"></i></div>
+      <div class="hc-info"><div class="hc-title">Sapa Bắc Hà</div><div class="hc-sub">3N2Đ từ 4.200.000đ</div></div>
+      <span class="hc-badge" style="background:#8b5cf6">💎 VIP</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<section class="stats-bar">
+  <div class="stats-bar-inner">
+    <div class="sb-item"><i class="fas fa-shield-alt"></i><div><strong>Thanh toán an toàn</strong><span>Bảo mật SSL 256-bit</span></div></div>
+    <div class="sb-item"><i class="fas fa-undo"></i><div><strong>Hoàn tiền dễ dàng</strong><span>Trong 24 giờ</span></div></div>
+    <div class="sb-item"><i class="fas fa-headset"></i><div><strong>Hỗ trợ 24/7</strong><span>Hotline 1800 1234</span></div></div>
+    <div class="sb-item"><i class="fas fa-tag"></i><div><strong>Giá tốt nhất</strong><span>Cam kết hoàn tiền chênh lệch</span></div></div>
+  </div>
+</section>
+
+<!-- FEATURED TOURS -->
+<section class="section" id="tours">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">TOUR NỔI BẬT</div>
+      <h2 class="section-title">Khám phá các hành trình <span class="gradient-text">tuyệt vời</span></h2>
+      <p class="section-desc">Lựa chọn từ hàng chục tour du lịch được thiết kế bởi đội ngũ chuyên gia</p>
+    </div>
+    <div class="tours-grid">
+      {% for product in featured_products %}
+      <div class="tour-card" style="--idx:{{ forloop.counter }}">
+        <div class="tour-card-img" style="background:linear-gradient(135deg, hsl({{ forloop.counter|add:'200' }},70%,35%), hsl({{ forloop.counter|add:'240' }},80%,55%))">
+          <i class="fas fa-{% cycle 'mountain' 'umbrella-beach' 'city' 'ship' 'hiking' 'campground' %}"></i>
+          <div class="tour-card-overlay">
+            <span class="tour-badge">{{ product.tour_page.duration_days }}N{{ product.tour_page.duration_nights }}Đ</span>
+            {% if product.tour_page.category %}
+            <span class="tour-cat">{{ product.tour_page.category.name }}</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="tour-card-body">
+          <div class="tour-destination">{% if product.tour_page.destination %}<i class="fas fa-map-pin"></i> {{ product.tour_page.destination.name }}{% endif %}</div>
+          <h3 class="tour-name">{{ product.tour_page.title }}</h3>
+          {% if product.tour_page.tagline %}
+          <p class="tour-tagline">{{ product.tour_page.tagline }}</p>
+          {% endif %}
+          <div class="tour-meta">
+            <div class="tour-meta-item"><i class="fas fa-clock"></i> {{ product.tour_page.duration_days }} ngày</div>
+            <div class="tour-meta-item"><i class="fas fa-users"></i> Tối đa 35 khách</div>
+          </div>
+          <div class="tour-footer">
+            <div class="tour-price">
+              <span class="price-from">Từ</span>
+              <span class="price-val">{{ product.base_price|floatformat:0 }}</span>
+              <span class="price-unit">đ/người</span>
+            </div>
+            <a href="/tours/{{ product.tour_page.slug }}/" class="btn-book">Đặt ngay <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="empty-state">
+        <i class="fas fa-suitcase-rolling"></i>
+        <p>Chưa có tour nào. Hãy chạy: <code>python manage.py generate_mock_data</code></p>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="section-cta">
+      <a href="{% url 'tour_list' %}" class="btn-outline-primary">Xem tất cả tour <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- UPCOMING DEPARTURES -->
+{% if upcoming_departures %}
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">KHỞI HÀNH SẮP TỚI</div>
+      <h2 class="section-title">Lịch khởi hành <span class="gradient-text">gần nhất</span></h2>
+    </div>
+    <div class="departures-list">
+      {% for dep in upcoming_departures %}
+      <div class="dep-card">
+        <div class="dep-date">
+          <div class="dep-day">{{ dep.start_date|date:'d' }}</div>
+          <div class="dep-month">Tháng {{ dep.start_date|date:'n' }}</div>
+        </div>
+        <div class="dep-info">
+          <div class="dep-tour">{{ dep.tour_product.tour_page.title }}</div>
+          <div class="dep-meta">
+            <span><i class="fas fa-map-marker-alt"></i> {{ dep.departure_point }}</span>
+            <span><i class="fas fa-user-tie"></i> HDV: {{ dep.guide_name|default:'TBA' }}</span>
+          </div>
+        </div>
+        <div class="dep-seats">
+          <div class="seats-num">{{ dep.available_seats }}<small>/{{ dep.total_seats }}</small></div>
+          <div class="seats-label">chỗ còn</div>
+          <div class="seats-bar"><div class="seats-fill" style="width:{{ dep.available_seats|divisibleby:dep.total_seats }}%"></div></div>
+        </div>
+        <div class="dep-price">
+          <div class="dep-price-val">{{ dep.effective_price|floatformat:0 }}đ</div>
+          <a href="{% url 'booking_create' dep.pk %}" class="btn-book-sm">Đặt <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- LIVE STATS DASHBOARD -->
+<section class="section" id="stats">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">THỐNG KÊ THỜI GIAN THỰC</div>
+      <h2 class="section-title">Dashboard <span class="gradient-text">Analytics</span></h2>
+      <p class="section-desc">Số liệu hoạt động hệ thống được cập nhật tự động</p>
+    </div>
+    <div class="dashboard-widget">
+      <div class="dw-header">
+        <span>📊 TRAVEL CRM LIVE DASHBOARD</span>
+        <span class="live-dot">● LIVE</span>
+      </div>
+      <div class="dw-kpis" id="kpiGrid">
+        <div class="dw-kpi">
+          <div class="dw-kpi-icon" style="background:rgba(99,102,241,.15);color:#6366f1"><i class="fas fa-money-bill-wave"></i></div>
+          <div class="dw-kpi-val" id="kpi-revenue">Đang tải...</div>
+          <div class="dw-kpi-label">Tổng doanh thu</div>
+        </div>
+        <div class="dw-kpi">
+          <div class="dw-kpi-icon" style="background:rgba(6,182,212,.15);color:#06b6d4"><i class="fas fa-ticket-alt"></i></div>
+          <div class="dw-kpi-val" id="kpi-bookings">...</div>
+          <div class="dw-kpi-label">Tổng đơn đặt</div>
+        </div>
+        <div class="dw-kpi">
+          <div class="dw-kpi-icon" style="background:rgba(16,185,129,.15);color:#10b981"><i class="fas fa-users"></i></div>
+          <div class="dw-kpi-val" id="kpi-customers">...</div>
+          <div class="dw-kpi-label">Khách hàng</div>
+        </div>
+        <div class="dw-kpi">
+          <div class="dw-kpi-icon" style="background:rgba(245,158,11,.15);color:#f59e0b"><i class="fas fa-crown"></i></div>
+          <div class="dw-kpi-val" id="kpi-vip">...</div>
+          <div class="dw-kpi-label">Khách VIP</div>
+        </div>
+      </div>
+      <div class="dw-chart-area">
+        <div class="dw-chart-title">Doanh thu theo tháng (2026)</div>
+        <div class="dw-bars" id="revenueChart"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  fetch('/api/stats/')
+    .then(r => r.json())
+    .then(data => {
+      const fmt = n => new Intl.NumberFormat('vi-VN').format(Math.round(n));
+      document.getElementById('kpi-revenue').textContent    = fmt(data.total_revenue) + ' đ';
+      document.getElementById('kpi-bookings').textContent   = fmt(data.total_bookings);
+      document.getElementById('kpi-customers').textContent  = fmt(data.total_customers);
+      document.getElementById('kpi-vip').textContent        = fmt(data.vip_customers);
+
+      // Draw bar chart
+      const months = data.revenue_by_month || [];
+      const container = document.getElementById('revenueChart');
+      if (!months.length) { container.innerHTML = '<p style="color:#64748b;text-align:center;padding:20px">Chưa có dữ liệu. Hãy chạy generate_mock_data.</p>'; return; }
+      const maxVal = Math.max(...months.map(m => parseFloat(m.total) || 0));
+      container.innerHTML = months.map(m => {
+        const pct = maxVal > 0 ? (parseFloat(m.total) / maxVal * 100) : 0;
+        const month = m.month ? new Date(m.month).getMonth() + 1 : '?';
+        return `<div class="dw-bar-group">
+          <div class="dw-bar" style="--h:${pct}%" title="Tháng ${month}: ${fmt(m.total)} đ">
+            <div class="dw-bar-fill"></div>
+          </div>
+          <div class="dw-bar-label">T${month}</div>
+        </div>`;
+      }).join('');
+    })
+    .catch(() => {
+      ['kpi-revenue','kpi-bookings','kpi-customers','kpi-vip'].forEach(id => {
+        document.getElementById(id).textContent = '—';
+      });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Đăng nhập — VietTravel{% endblock %}
+{% block content %}
+<section class="auth-section">
+  <div class="auth-card">
+    <div class="auth-logo"><i class="fas fa-plane-departure"></i> VietTravel</div>
+    <h2>Chào mừng trở lại</h2>
+    <p>Đăng nhập để tiếp tục hành trình của bạn</p>
+    <form method="POST" class="auth-form">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.GET.next }}"/>
+      <div class="form-group">
+        <label>Tên đăng nhập</label>
+        <div class="input-icon-wrap"><i class="fas fa-at"></i><input type="text" name="username" placeholder="username" required autofocus/></div>
+      </div>
+      <div class="form-group">
+        <label>Mật khẩu</label>
+        <div class="input-icon-wrap"><i class="fas fa-lock"></i><input type="password" name="password" placeholder="••••••••" required/></div>
+      </div>
+      <button type="submit" class="btn-auth">Đăng nhập <i class="fas fa-arrow-right"></i></button>
+      <div class="auth-switch">Chưa có tài khoản? <a href="{% url 'register' %}">Đăng ký miễn phí</a></div>
+      <div class="auth-switch" style="margin-top:8px"><a href="/admin/">Vào Wagtail Admin →</a></div>
+    </form>
+  </div>
+</section>
+{% endblock %}

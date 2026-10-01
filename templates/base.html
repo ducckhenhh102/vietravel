@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}VietTravel — Hệ thống Đặt vé Du lịch{% endblock %}</title>
+  <meta name="description" content="{% block meta_desc %}Đặt vé du lịch trực tuyến — Tour trong nước và quốc tế{% endblock %}"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/main.css' %}"/>
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="{% url 'home' %}" class="nav-logo">
+      <div class="logo-icon"><i class="fas fa-plane-departure"></i></div>
+      <span class="logo-text">Viet<span class="logo-accent">Travel</span></span>
+    </a>
+
+    <div class="nav-links">
+      <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Trang chủ</a>
+      <a href="{% url 'tour_list' %}" class="nav-link {% if request.resolver_match.url_name == 'tour_list' %}active{% endif %}">Tour du lịch</a>
+      <a href="#about" class="nav-link">Về chúng tôi</a>
+      <a href="#contact" class="nav-link">Liên hệ</a>
+    </div>
+
+    <div class="nav-actions">
+      {% if user.is_authenticated %}
+        <div class="nav-user-menu">
+          <button class="nav-user-btn" id="userMenuBtn">
+            <div class="user-avatar">{{ user.first_name|first|upper }}{{ user.last_name|first|upper }}</div>
+            <span class="user-name">{{ user.get_full_name|default:user.username }}</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="user-dropdown" id="userDropdown">
+            <a href="{% url 'my_bookings' %}"><i class="fas fa-ticket-alt"></i> Đơn đặt của tôi</a>
+            {% if user.is_staff %}
+            <a href="/admin/"><i class="fas fa-cog"></i> Wagtail Admin</a>
+            {% endif %}
+            <hr/>
+            <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+          </div>
+        </div>
+      {% else %}
+        <a href="{% url 'login' %}" class="btn-nav-ghost">Đăng nhập</a>
+        <a href="{% url 'register' %}" class="btn-nav-primary">Đăng ký</a>
+      {% endif %}
+    </div>
+
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="{% url 'home' %}">Trang chủ</a>
+    <a href="{% url 'tour_list' %}">Tour du lịch</a>
+    {% if user.is_authenticated %}
+      <a href="{% url 'my_bookings' %}">Đơn đặt của tôi</a>
+      <a href="{% url 'logout' %}">Đăng xuất</a>
+    {% else %}
+      <a href="{% url 'login' %}">Đăng nhập</a>
+      <a href="{% url 'register' %}">Đăng ký miễn phí</a>
+    {% endif %}
+  </div>
+</nav>
+
+<!-- MESSAGES -->
+{% if messages %}
+<div class="toast-container" id="toastContainer">
+  {% for msg in messages %}
+  <div class="toast toast-{{ msg.tags }}">
+    <i class="fas {% if 'success' in msg.tags %}fa-check-circle{% elif 'error' in msg.tags %}fa-times-circle{% else %}fa-info-circle{% endif %}"></i>
+    <span>{{ msg }}</span>
+    <button onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- PAGE CONTENT -->
+<main>{% block content %}{% endblock %}</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="nav-logo" style="margin-bottom:16px">
+        <div class="logo-icon"><i class="fas fa-plane-departure"></i></div>
+        <span class="logo-text" style="color:white">Viet<span class="logo-accent">Travel</span></span>
+      </div>
+      <p>Hệ thống đặt vé du lịch trực tuyến hàng đầu Việt Nam. Kết nối bạn với những trải nghiệm khó quên.</p>
+      <div class="social-links">
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+        <a href="#"><i class="fab fa-tiktok"></i></a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <h4>Tour du lịch</h4>
+      <a href="#">Tour Miền Bắc</a>
+      <a href="#">Tour Miền Trung</a>
+      <a href="#">Tour Miền Nam</a>
+      <a href="#">Tour Biển Đảo</a>
+    </div>
+    <div class="footer-links">
+      <h4>Hỗ trợ</h4>
+      <a href="#">Hướng dẫn đặt tour</a>
+      <a href="#">Chính sách hoàn tiền</a>
+      <a href="#">Điều khoản sử dụng</a>
+      <a href="#">FAQ</a>
+    </div>
+    <div class="footer-links">
+      <h4>Liên hệ</h4>
+      <p><i class="fas fa-phone"></i> 1800 1234</p>
+      <p><i class="fas fa-envelope"></i> support@viettravel.vn</p>
+      <p><i class="fas fa-clock"></i> 8:00 – 22:00 hàng ngày</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 VietTravel. Được xây dựng với Django + Wagtail CMS.</span>
+    <span>
+      <a href="/admin/">Wagtail Admin</a> &nbsp;|&nbsp;
+      <a href="/api/stats/">API Stats</a>
+    </span>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scrollTop"><i class="fas fa-arrow-up"></i></button>
+
+<script src="{% static 'js/main.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

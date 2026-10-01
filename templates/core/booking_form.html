@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Đặt Tour — {{ departure.tour_product.tour_page.title }}{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <a href="javascript:history.back()" class="back-link"><i class="fas fa-arrow-left"></i> Quay lại</a>
+    <h1>Đặt tour <span class="gradient-text">{{ departure.tour_product.tour_page.title }}</span></h1>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="booking-layout">
+      <div class="booking-form-wrap">
+        <div class="form-card">
+          <h3 class="form-card-title"><i class="fas fa-info-circle"></i> Thông tin chuyến đi</h3>
+          <div class="dep-summary">
+            <div class="ds-row"><span>Ngày khởi hành:</span><strong>{{ departure.start_date|date:'d/m/Y' }}</strong></div>
+            <div class="ds-row"><span>Ngày về:</span><strong>{{ departure.end_date|date:'d/m/Y' }}</strong></div>
+            <div class="ds-row"><span>Điểm khởi hành:</span><strong>{{ departure.departure_point }}</strong></div>
+            <div class="ds-row"><span>HDV:</span><strong>{{ departure.guide_name|default:'Sẽ thông báo sau' }}</strong></div>
+            <div class="ds-row"><span>Chỗ còn lại:</span><strong class="text-success">{{ departure.available_seats }}/{{ departure.total_seats }}</strong></div>
+          </div>
+        </div>
+        <div class="form-card">
+          <h3 class="form-card-title"><i class="fas fa-users"></i> Thông tin đặt chỗ</h3>
+          <form method="POST" class="booking-form" id="bookingForm">
+            {% csrf_token %}
+            <div class="form-row">
+              <div class="form-group">
+                <label>Số người lớn <span class="required">*</span></label>
+                <div class="number-input">
+                  <button type="button" onclick="changeNum('adults',-1)">−</button>
+                  <input type="number" name="num_adults" id="adults" value="1" min="1" max="{{ departure.available_seats }}" required/>
+                  <button type="button" onclick="changeNum('adults',1)">+</button>
+                </div>
+                <small>{{ departure.effective_price|floatformat:0 }} đ/người</small>
+              </div>
+              <div class="form-group">
+                <label>Số trẻ em (2–11 tuổi)</label>
+                <div class="number-input">
+                  <button type="button" onclick="changeNum('children',-1)">−</button>
+                  <input type="number" name="num_children" id="children" value="0" min="0" max="10"/>
+                  <button type="button" onclick="changeNum('children',1)">+</button>
+                </div>
+                <small>{{ departure.tour_product.child_price|floatformat:0|default:'70%' }} đ/trẻ em</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Yêu cầu đặc biệt</label>
+              <textarea name="special_request" rows="3" placeholder="Phòng riêng, ăn chay, hỗ trợ xe lăn..." class="form-textarea"></textarea>
+            </div>
+            <div class="total-preview" id="totalPreview">
+              <div class="tp-row"><span>Người lớn (1 × {{ departure.effective_price|floatformat:0 }}đ)</span><span id="adultTotal">{{ departure.effective_price|floatformat:0 }}đ</span></div>
+              <div class="tp-row"><span>Trẻ em</span><span id="childTotal">0đ</span></div>
+              <div class="tp-divider"></div>
+              <div class="tp-row tp-total"><span>Tổng cộng</span><span id="grandTotal">{{ departure.effective_price|floatformat:0 }}đ</span></div>
+            </div>
+            {% if user.is_authenticated %}
+            <button type="submit" class="btn-submit-booking"><i class="fas fa-check-circle"></i> Xác nhận đặt tour</button>
+            {% else %}
+            <a href="{% url 'login' %}?next={{ request.path }}" class="btn-submit-booking"><i class="fas fa-sign-in-alt"></i> Đăng nhập để đặt tour</a>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script>
+const priceAdult = {{ departure.effective_price }};
+const priceChild = {{ departure.tour_product.child_price|default:"0" }};
+const childFallback = priceAdult * 0.7;
+const childActual = priceChild || childFallback;
+function changeNum(id, delta) {
+  const el = document.getElementById(id === 'adults' ? 'adults' : 'children');
+  el.value = Math.max(parseInt(el.min), Math.min(parseInt(el.max||999), parseInt(el.value) + delta));
+  updateTotal();
+}
+function updateTotal() {
+  const adults = parseInt(document.getElementById('adults').value) || 0;
+  const children = parseInt(document.getElementById('children').value) || 0;
+  const fmt = n => new Intl.NumberFormat('vi-VN').format(Math.round(n)) + 'đ';
+  document.getElementById('adultTotal').textContent = fmt(adults * priceAdult);
+  document.getElementById('childTotal').textContent  = fmt(children * childActual);
+  document.getElementById('grandTotal').textContent  = fmt(adults * priceAdult + children * childActual);
+}
+document.getElementById('adults').addEventListener('input', updateTotal);
+document.getElementById('children').addEventListener('input', updateTotal);
+</script>
+{% endblock %}

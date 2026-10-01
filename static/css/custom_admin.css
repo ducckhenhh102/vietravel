@@ -1,0 +1,230 @@
+/* Custom Wagtail Admin Theme - Lumino Admin Style */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Fonts */
+    --w-font-sans: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+    /* Primary Colors (Lumino Blue) */
+    --w-color-primary: #30a5ff;
+    --w-color-primary-200: #8ec8f6;
+    --w-color-primary-400: #5db6ff;
+    --w-color-primary-600: #1b8ced;
+    
+    /* Header (Dark) */
+    --w-color-surface-header: #222222;
+    --w-color-text-header: #ffffff;
+    
+    /* Sidebar (Light/White) */
+    --w-color-surface-menu: #ffffff;
+    --w-color-surface-menu-hover: #f8f9fa;
+    --w-color-surface-menu-active: #30a5ff;
+    
+    /* Text Colors for Sidebar */
+    --w-color-text-context: #444444; /* Sidebar items */
+    --w-color-text-context-hover: #222222;
+    --w-color-text-button: #ffffff;
+    
+    /* Main Content Background */
+    --w-color-surface-page: #eaebec;
+    
+    /* Borders */
+    --w-color-border: #e9ecf2;
+    --w-border-radius: 4px;
+    --w-border-radius-large: 6px;
+}
+
+/* Base Body tweaks */
+body {
+    background-color: var(--w-color-surface-page);
+    font-family: var(--w-font-sans);
+    color: #444444;
+}
+
+/* Header */
+header, .header {
+    background-color: var(--w-color-surface-header) !important;
+    border-bottom: none;
+    box-shadow: none;
+    color: #ffffff;
+}
+
+.header__title {
+    color: #ffffff !important;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Sidebar styling */
+.sidebar {
+    background-color: var(--w-color-surface-menu) !important;
+    border-right: 1px solid var(--w-color-border);
+    box-shadow: none;
+}
+
+.sidebar-main {
+    background-color: var(--w-color-surface-menu) !important;
+}
+
+.sidebar-menu-item {
+    border-bottom: 1px solid #eeeeee;
+}
+
+.sidebar-menu-item a {
+    color: var(--w-color-text-context) !important;
+    font-weight: 500;
+    padding: 12px 20px;
+    border-radius: 0;
+    margin: 0;
+    transition: all 0.2s;
+}
+
+.sidebar-menu-item a:hover {
+    background-color: var(--w-color-surface-menu-hover) !important;
+    color: var(--w-color-primary) !important;
+}
+
+.sidebar-menu-item--active > a, 
+.sidebar-menu-item--active > a:hover {
+    background-color: var(--w-color-surface-menu-active) !important;
+    color: #ffffff !important;
+    border-radius: 0;
+}
+
+/* Sidebar icons */
+.sidebar-menu-item a svg {
+    fill: #888888;
+}
+
+.sidebar-menu-item--active > a svg {
+    fill: #ffffff !important;
+}
+
+.sidebar-menu-item a:hover svg {
+    fill: var(--w-color-primary);
+}
+
+/* User Profile in sidebar (simulate the Lumino profile) */
+.sidebar-header {
+    background-color: #ffffff !important;
+    padding: 20px;
+    border-bottom: 1px solid var(--w-color-border);
+    text-align: center;
+}
+
+.sidebar-logo {
+    display: flex;
+    justify-content: center;
+}
+
+.sidebar-logo img {
+    border-radius: 50%;
+    border: 3px solid #eeeeee;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+/* Dashboard summary widgets */
+.dashboard-item {
+    background: #ffffff;
+    border-radius: var(--w-border-radius);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+    border: 1px solid var(--w-color-border);
+    border-top: 4px solid var(--w-color-primary);
+    padding: 20px;
+    text-align: center;
+    transition: none;
+}
+
+.dashboard-item:hover {
+    transform: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+
+.dashboard-item__title {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #999999;
+    text-transform: uppercase;
+    margin-top: 10px;
+}
+
+.dashboard-item__number {
+    font-size: 2.8rem;
+    font-weight: 300;
+    color: #333333;
+    line-height: 1;
+}
+
+/* Data Tables */
+.listing {
+    background: #ffffff;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: var(--w-border-radius);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+    border: 1px solid var(--w-color-border);
+}
+
+.listing thead th {
+    background: #f9f9f9;
+    color: #444444;
+    font-weight: 600;
+    border-bottom: 2px solid #dddddd;
+    padding: 15px;
+    text-transform: none;
+}
+
+.listing tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+.listing tbody td {
+    border-top: 1px solid #eeeeee;
+    padding: 15px;
+    color: #555555;
+}
+
+/* Buttons */
+.button {
+    border-radius: var(--w-border-radius);
+    font-weight: 500;
+    background-color: var(--w-color-primary);
+    color: #ffffff;
+    border: none;
+    box-shadow: none;
+    padding: 8px 16px;
+}
+
+.button:hover {
+    background-color: var(--w-color-primary-600);
+    transform: none;
+}
+
+/* Action icons */
+.button.button-secondary {
+    background-color: #ffffff;
+    color: #444444;
+    border: 1px solid #dddddd;
+}
+
+.button.button-secondary:hover {
+    background-color: #f5f5f5;
+    color: #222222;
+}
+
+/* Title header areas */
+.w-header {
+    background: #ffffff;
+    border-bottom: 1px solid var(--w-color-border);
+    padding: 20px 30px;
+    margin: -20px -20px 20px -20px;
+}
+
+/* Page content wrapper */
+.content-wrapper {
+    padding: 20px;
+}

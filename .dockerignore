@@ -1,0 +1,12 @@
+# .dockerignore
+__pycache__
+*.py[cod]
+*.egg-info
+.env
+.git
+.gitignore
+staticfiles/
+media/
+node_modules/
+*.md
+docs/

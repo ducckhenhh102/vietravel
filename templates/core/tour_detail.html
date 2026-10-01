@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ product.tour_page.title }} — VietTravel{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <a href="{% url 'tour_list' %}" class="back-link"><i class="fas fa-arrow-left"></i> Về danh sách tour</a>
+    <div class="tour-detail-hero">
+      <div class="tdh-icon" style="background:linear-gradient(135deg,#6366f1,#06b6d4)"><i class="fas fa-map-marked-alt"></i></div>
+      <div>
+        <div class="page-hero-tag">{{ product.tour_page.category }}</div>
+        <h1>{{ product.tour_page.title }}</h1>
+        <div class="tour-meta-row">
+          <span><i class="fas fa-clock"></i> {{ product.tour_page.duration_days }} ngày {{ product.tour_page.duration_nights }} đêm</span>
+          <span><i class="fas fa-map-pin"></i> {{ product.tour_page.destination }}</span>
+          <span><i class="fas fa-tag"></i> {{ product.sku_code }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="tour-detail-layout">
+      <div class="tour-detail-content">
+        {% if product.tour_page.tagline %}
+        <div class="tour-tagline-box">{{ product.tour_page.tagline }}</div>
+        {% endif %}
+        {% if product.tour_page.overview %}
+        <div class="content-block"><h3><i class="fas fa-info-circle"></i> Tổng quan</h3><div class="rich-content">{{ product.tour_page.overview|safe }}</div></div>
+        {% endif %}
+        {% if product.tour_page.highlights %}
+        <div class="content-block"><h3><i class="fas fa-star"></i> Điểm nổi bật</h3><div class="rich-content">{{ product.tour_page.highlights|safe }}</div></div>
+        {% endif %}
+        {% if product.tour_page.includes %}
+        <div class="content-block"><h3><i class="fas fa-check-circle"></i> Dịch vụ bao gồm</h3><div class="rich-content">{{ product.tour_page.includes|safe }}</div></div>
+        {% endif %}
+      </div>
+      <div class="tour-booking-sidebar">
+        <div class="booking-card">
+          <div class="bc-price"><span class="price-from">Từ</span><span class="bc-price-val">{{ product.base_price|floatformat:0 }}</span><span class="price-unit">đ/người</span></div>
+          <hr/>
+          <h4 style="margin-bottom:16px"><i class="fas fa-calendar-alt"></i> Lịch khởi hành</h4>
+          {% if departures %}
+            {% for dep in departures %}
+            <div class="dep-option {% if dep.available_seats == 0 %}dep-full{% endif %}">
+              <div class="dep-opt-date">{{ dep.start_date|date:'d/m/Y' }}</div>
+              <div class="dep-opt-info">
+                <div class="dep-opt-seats">Còn {{ dep.available_seats }}/{{ dep.total_seats }} chỗ</div>
+                <div class="dep-opt-price">{{ dep.effective_price|floatformat:0 }}đ</div>
+              </div>
+              {% if dep.available_seats > 0 %}
+              <a href="{% url 'booking_create' dep.pk %}" class="btn-book-dep">Đặt</a>
+              {% else %}
+              <span class="badge-full">Hết</span>
+              {% endif %}
+            </div>
+            {% endfor %}
+          {% else %}
+          <div class="no-departure"><i class="fas fa-calendar-times"></i><p>Hiện chưa có lịch khởi hành</p></div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

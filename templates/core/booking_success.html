@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Đặt tour thành công! — VietTravel{% endblock %}
+{% block content %}
+<section class="section" style="min-height:70vh;display:flex;align-items:center">
+  <div class="container" style="text-align:center">
+    <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+    <h1 style="font-size:2.5rem;font-weight:800;margin:24px 0 12px">Đặt tour thành công! 🎉</h1>
+    <p style="color:#94a3b8;font-size:1.1rem;margin-bottom:32px">Chúng tôi đã nhận được đơn đặt tour của bạn.</p>
+    <div class="success-card">
+      <div class="sc-row"><span>Mã đặt tour</span><strong style="font-size:1.4rem;color:#6366f1;font-family:monospace">{{ booking.booking_code }}</strong></div>
+      <div class="sc-row"><span>Tour</span><strong>{{ booking.departure.tour_product.tour_page.title }}</strong></div>
+      <div class="sc-row"><span>Ngày khởi hành</span><strong>{{ booking.departure.start_date|date:'d/m/Y' }}</strong></div>
+      <div class="sc-row"><span>Số hành khách</span><strong>{{ booking.num_adults }} người lớn, {{ booking.num_children }} trẻ em</strong></div>
+      <div class="sc-row"><span>Tổng tiền</span><strong style="color:#10b981;font-size:1.3rem">{{ booking.final_amount|floatformat:0 }} đ</strong></div>
+      <div class="sc-row"><span>Trạng thái</span><span class="badge-pending">⏳ Chờ xác nhận</span></div>
+    </div>
+    <p style="color:#64748b;margin:24px 0">Nhân viên sẽ liên hệ xác nhận trong vòng 2 giờ làm việc.</p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+      <a href="{% url 'my_bookings' %}" class="btn-primary"><i class="fas fa-ticket-alt"></i> Xem đơn của tôi</a>
+      <a href="{% url 'home' %}" class="btn-outline-primary"><i class="fas fa-home"></i> Về trang chủ</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

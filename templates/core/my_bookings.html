@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Đơn đặt của tôi — VietTravel{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-tag">TÀI KHOẢN</div>
+    <h1>Đơn đặt <span class="gradient-text">của tôi</span></h1>
+    <div class="customer-tier-badge tier-{{ customer.membership_tier|lower }}">{{ customer.get_membership_tier_display }}</div>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="my-bookings-grid">
+      {% for booking in bookings %}
+      <div class="mybooking-card">
+        <div class="mbc-header">
+          <div class="mbc-code">{{ booking.booking_code }}</div>
+          <span class="status-badge status-{{ booking.status|lower }}">{{ booking.get_status_display }}</span>
+        </div>
+        <div class="mbc-tour">{{ booking.departure.tour_product.tour_page.title }}</div>
+        <div class="mbc-meta">
+          <span><i class="fas fa-calendar"></i> {{ booking.departure.start_date|date:'d/m/Y' }}</span>
+          <span><i class="fas fa-users"></i> {{ booking.num_passengers }} khách</span>
+        </div>
+        <div class="mbc-footer">
+          <strong class="mbc-price">{{ booking.final_amount|floatformat:0 }} đ</strong>
+          <span class="mbc-date">Đặt {{ booking.booking_date|date:'d/m/Y' }}</span>
+        </div>
+      </div>
+      {% empty %}
+      <div class="empty-state" style="grid-column:1/-1">
+        <i class="fas fa-ticket-alt"></i>
+        <h3>Chưa có đơn đặt nào</h3>
+        <a href="{% url 'tour_list' %}" class="btn-primary">Khám phá Tour ngay</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Tất cả Tour Du lịch — VietTravel{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-tag">DANH SÁCH TOUR</div>
+    <h1>Tour Du lịch <span class="gradient-text">Việt Nam</span></h1>
+    <p>Khám phá hàng chục hành trình hấp dẫn trong và ngoài nước</p>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="filter-bar">
+      <form method="GET" class="filter-form">
+        <div class="filter-chips">
+          <a href="?" class="filter-chip {% if not current_category %}active{% endif %}">Tất cả</a>
+          {% for cat in categories %}
+          <a href="?category={{ cat.slug }}" class="filter-chip {% if current_category == cat.slug %}active{% endif %}">{{ cat.icon }} {{ cat.name }}</a>
+          {% endfor %}
+        </div>
+        <div class="filter-price">
+          <input type="number" name="min_price" placeholder="Giá từ (đ)" value="{{ request.GET.min_price }}" class="price-input"/>
+          <span>—</span>
+          <input type="number" name="max_price" placeholder="Giá đến (đ)" value="{{ request.GET.max_price }}" class="price-input"/>
+          <button type="submit" class="btn-filter"><i class="fas fa-filter"></i> Lọc</button>
+        </div>
+      </form>
+    </div>
+    <div class="tours-grid">
+      {% for product in products %}
+      <div class="tour-card" style="--idx:{{ forloop.counter }}">
+        <div class="tour-card-img" style="background:linear-gradient(135deg, hsl({{ forloop.counter|add:'200' }},70%,35%), hsl({{ forloop.counter|add:'240' }},80%,55%))">
+          <i class="fas fa-{% cycle 'mountain' 'umbrella-beach' 'city' 'ship' 'hiking' 'campground' %}"></i>
+          <div class="tour-card-overlay">
+            <span class="tour-badge">{{ product.tour_page.duration_days }}N{{ product.tour_page.duration_nights }}Đ</span>
+          </div>
+        </div>
+        <div class="tour-card-body">
+          <div class="tour-destination">{% if product.tour_page.destination %}<i class="fas fa-map-pin"></i> {{ product.tour_page.destination }}{% endif %}</div>
+          <h3 class="tour-name">{{ product.tour_page.title }}</h3>
+          <div class="tour-sku"><code>{{ product.sku_code }}</code></div>
+          <div class="tour-footer">
+            <div class="tour-price">
+              <span class="price-from">Từ</span>
+              <span class="price-val">{{ product.base_price|floatformat:0 }}</span>
+              <span class="price-unit">đ</span>
+            </div>
+            <a href="/tours/{{ product.tour_page.slug }}/" class="btn-book">Chi tiết <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="empty-state" style="grid-column:1/-1">
+        <i class="fas fa-suitcase-rolling"></i>
+        <h3>Chưa có tour nào</h3>
+        <p>Chạy lệnh sau để sinh dữ liệu mẫu:</p>
+        <code>python manage.py generate_mock_data</code>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
